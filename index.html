@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Srishti Gupta</title>
 <meta name="description" content="Srishti Gupta, postdoctoral researcher at CISPA. Robustness and security of machine learning after deployment: distribution shift, adversarial drift and trustworthy evaluation.">
+<script>
+  // Apply a saved light/dark choice before the page paints
+  try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -59,6 +63,8 @@
   nav a:not(.home) { color: var(--muted); text-decoration: none; font-size: 0.92rem; white-space: nowrap; }
   nav a:not(.home):hover { color: var(--ink); }
 
+  .theme-toggle { font: 500 0.85rem/1 "Public Sans", sans-serif; color: var(--ink); background: transparent; border: 1px solid var(--rule); border-radius: 999px; padding: 0.4rem 0.75rem; cursor: pointer; white-space: nowrap; }
+  .theme-toggle:hover { border-color: var(--muted); }
   main { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 4rem; }
   section { padding-top: 3rem; }
   section > h2 { font-size: 1.5rem; margin: 0 0 1.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--rule); }
@@ -104,6 +110,7 @@
   .pub:last-child { border-bottom: 0; }
   .tag { align-self: start; justify-self: start; font-size: 0.75rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 0.2rem 0.45rem; margin-top: 0.2rem; white-space: nowrap; }
   .pub .title { font-weight: 600; margin: 0; }
+  .pub .venue a { font-style: normal; }
   .pub .venue { font-style: italic; color: var(--ink); margin: 0.1rem 0 0; font-size: 0.95rem; }
   .pub .authors { color: var(--muted); margin: 0.15rem 0 0; font-size: 0.92rem; }
   .pub .authors b { color: var(--ink); font-weight: 600; }
@@ -117,6 +124,8 @@
   .dated p { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.95rem; }
   .sub { font-family: "Literata", Georgia, serif; font-size: 1.15rem; margin: 2rem 0 0.5rem; }
   .sub:first-of-type { margin-top: 0; }
+  .dated.compact li { padding: 0.45rem 0; }
+  .dated.compact h3 { font-weight: 500; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
 
   .refs { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem; }
@@ -145,8 +154,9 @@
     <a href="#research">Research</a>
     <a href="#publications">Publications</a>
     <a href="#teaching">Teaching</a>
-    <a href="#service">Service</a>
+    <a href="#service">Services</a>
     <a href="#cv">CV</a>
+    <button type="button" class="theme-toggle" id="theme-toggle">Mode: Light</button>
   </div>
 </nav>
 
@@ -165,9 +175,8 @@
         </div>
       </div>
       <p class="lede">Machine learning models are tested in the lab but used in the world. I study what happens in between: how deployed models fail when their inputs drift, whether naturally or at an attacker’s hand, and how to detect, withstand and honestly measure that drift.</p>
-      <p class="prose">I work in <a href="https://leaschoenherr.me">Lea Schönherr’s group</a> at CISPA. I completed my Ph.D. in Artificial Intelligence (summa cum laude) in the Italian National PhD Program, at Sapienza University of Rome and the University of Cagliari, advised by <a href="https://battistabiggio.github.io">Battista Biggio</a> and <a href="https://www.saiferlab.ai/people/fabioroli">Fabio Roli</a>. Before research, I built data pipelines at JPMorgan Chase in New York.</p>
+      <p class="prose">I work in <a href="https://leaschoenherr.me">Lea Schönherr’s</a> group at CISPA. I completed my Ph.D. in Artificial Intelligence (summa cum laude) in the Italian National PhD Program, at Sapienza University of Rome co-hosted by the University of Cagliari, advised by <a href="https://battistabiggio.github.io">Battista Biggio</a> and <a href="https://www.saiferlab.ai/people/fabioroli">Fabio Roli</a>. Before research, I built data pipelines at JPMorgan Chase in New York.</p>
       <ul class="links">
-        <li><a href="mailto:srishti.gupta@cispa.de">srishti.gupta@cispa.de</a></li>
         <li><a href="https://scholar.google.com/citations?user=q1eurDYAAAAJ&amp;hl=en">Google Scholar</a></li>
         <li><a href="https://github.com/srish01">GitHub</a></li>
         <li><a href="https://orcid.org/0000-0002-0810-6737">ORCID</a></li>
@@ -196,7 +205,7 @@
   <section id="news" aria-labelledby="news-h">
     <h2 id="news-h">News</h2>
     <ul class="news">
-      <li><time>2026</time><span>Co-organizing <a href="https://mirror-workshop.io">MIRROR</a>, the first workshop on meta-science in AI security research, at IEEE SaTML 2027 in Reykjavík.</span></li>
+      <li><time>2026</time><span>Co-chairing <a href="https://mirror-workshop.io">MIRROR</a>, the first workshop on meta-science in AI security research, at IEEE SaTML 2027 in Reykjavík.</span></li>
       <li><time>May 2026</time><span>Defended my Ph.D. thesis summa cum laude and joined CISPA as a postdoctoral researcher.</span></li>
       <li><time>2026</time><span>“Chasing Shadows: Pitfalls in LLM Security Research” appears at NDSS 2026.</span></li>
       <li><time>Dec 2025</time><span>Discussion chair at the <a href="https://llmsec-eurips.github.io">Foundations of Language Model Security</a> workshop, EurIPS 2025, Copenhagen.</span></li>
@@ -231,9 +240,8 @@
     <h3 class="year">2026</h3>
     <article class="pub"><span class="tag">NDSS</span><div>
       <p class="title">Chasing Shadows: Pitfalls in LLM Security Research</p>
-      <p class="venue">Network and Distributed System Security Symposium (NDSS)</p>
+      <p class="venue">Network and Distributed System Security Symposium (NDSS) · <a href="https://doi.org/10.60882/cispa.31861624">doi:10.60882/cispa.31861624</a></p>
       <p class="authors">Jonathan Evertz, Niklas Risse, Nicolai Neuer, Andreas Müller, Philipp Normann, Gaetano Sapia, <b>Srishti Gupta</b>, David Pape, Soumya Shaw, Devansh Srivastav, Christian Wressnegger, Erwin Quiring, Thorsten Eisenhofer, Daniel Arp, Lea Schönherr</p>
-      <p class="plinks"><a href="https://doi.org/10.60882/cispa.31861624">Paper</a></p>
     </div></article>
     <article class="pub"><span class="tag">IJCV</span><div>
       <p class="title">Out-of-Distribution Detection for Continual Learning: Design Principles and Benchmarking</p>
@@ -242,29 +250,25 @@
     </div></article>
     <article class="pub"><span class="tag">TIFS</span><div>
       <p class="title">Regression-aware Continual Learning for Android Malware Detection</p>
-      <p class="venue">IEEE Transactions on Information Forensics and Security (TIFS)</p>
+      <p class="venue">IEEE Transactions on Information Forensics and Security (TIFS) · <a href="https://doi.org/10.1109/TIFS.2026.3714132">doi:10.1109/TIFS.2026.3714132</a></p>
       <p class="authors">Daniele Ghiani, Daniele Angioni, Giorgio Piras, Angelo Sotgiu, Luca Minnei, <b>Srishti Gupta</b>, Maura Pintor, Fabio Roli, Battista Biggio</p>
-      <p class="plinks"><a href="https://doi.org/10.1109/TIFS.2026.3714132">Paper</a></p>
     </div></article>
     <article class="pub"><span class="tag">T-ITS</span><div>
       <p class="title">Security of Deep Reinforcement Learning for Autonomous Driving: A Survey</p>
-      <p class="venue">IEEE Transactions on Intelligent Transportation Systems (T-ITS)</p>
+      <p class="venue">IEEE Transactions on Intelligent Transportation Systems (T-ITS) · <a href="https://doi.org/10.1109/TITS.2026.3740283">doi:10.1109/TITS.2026.3740283</a></p>
       <p class="authors">Ambra Demontis, <b>Srishti Gupta</b>, Maura Pintor, Luca Demetrio, Kathrin Grosse, Hsiao-Ying Lin, Chengfang Fang, Battista Biggio, Fabio Roli</p>
-      <p class="plinks"><a href="https://doi.org/10.1109/TITS.2026.3740283">Paper</a></p>
     </div></article>
     <article class="pub"><span class="tag">DAI</span><div>
       <p class="title">Over-parameterization and Adversarial Robustness in Neural Networks: An Overview and Empirical Analysis</p>
-      <p class="venue">Discover Artificial Intelligence, Springer Nature</p>
+      <p class="venue">Discover Artificial Intelligence, Springer Nature · <a href="https://doi.org/10.1007/s44163-026-01621-5">doi:10.1007/s44163-026-01621-5</a></p>
       <p class="authors"><b>Srishti Gupta</b>, Zhang Chen, Luca Demetrio, Fabio Brau, Xiaoyi Feng, Zhaoqiang Xia, Antonio Emanuele Cinà, Maura Pintor, Luca Oneto, Ambra Demontis, Battista Biggio, Fabio Roli</p>
-      <p class="plinks"><a href="https://doi.org/10.1007/s44163-026-01621-5">Paper</a></p>
     </div></article>
 
     <h3 class="year">2025</h3>
     <article class="pub"><span class="tag">PR</span><div>
       <p class="title">Buffer-free Class-Incremental Learning with Out-of-Distribution Detection</p>
-      <p class="venue">Pattern Recognition</p>
+      <p class="venue">Pattern Recognition · <a href="https://doi.org/10.1016/j.patcog.2025.112441">doi:10.1016/j.patcog.2025.112441</a></p>
       <p class="authors"><b>Srishti Gupta</b>, Daniele Angioni, Maura Pintor, Ambra Demontis, Lea Schönherr, Battista Biggio, Fabio Roli</p>
-      <p class="plinks"><a href="https://doi.org/10.1016/j.patcog.2025.112441">Paper</a></p>
     </div></article>
     <article class="pub"><span class="tag">ICML-W</span><div>
       <p class="title">BUILD: Buffer-free Incremental Learning with OOD Detection for the Wild</p>
@@ -276,9 +280,8 @@
     <h3 class="year">2021</h3>
     <article class="pub"><span class="tag">Access</span><div>
       <p class="title">Gradient-Based Attacks on Information-Theoretic Feature Selection</p>
-      <p class="venue">IEEE Access, vol. 9</p>
+      <p class="venue">IEEE Access, vol. 9 · <a href="https://doi.org/10.1109/ACCESS.2021.3105555">doi:10.1109/ACCESS.2021.3105555</a></p>
       <p class="authors"><b>Srishti Gupta</b>, et al.</p>
-      <p class="plinks"><a href="https://doi.org/10.1109/ACCESS.2021.3105555">Paper</a></p>
     </div></article>
 
     <h3 class="year">Theses</h3>
@@ -308,13 +311,6 @@
     <h2 id="teaching-h">Teaching and supervision</h2>
     <div class="two">
       <div>
-        <h3 class="sub">Lectures</h3>
-        <ul class="dated">
-          <li><span class="when">2026</span><div><h3>Trustworthy Machine Learning</h3><p>University of Hamburg, Germany. Guest lectures and tutorials.</p></div></li>
-          <li><span class="when">2017–18</span><div><h3>L2/L3 Networking Protocols</h3><p>NIIT, Gurgaon, India. Corporate instructor for engineers from Nokia and Cisco.</p></div></li>
-        </ul>
-      </div>
-      <div>
         <h3 class="sub">Students</h3>
         <ul class="dated">
           <li><span class="when">2026–27</span><div><h3>Projection attacks on audio language models</h3><p>Esha Afzal, M.Sc. research, co-supervised</p></div></li>
@@ -325,29 +321,43 @@
           <li><span class="when">2026</span><div><h3>Continual deepfake detection</h3><p>Onur Aray, B.Sc. project</p></div></li>
         </ul>
       </div>
+      <div>
+        <h3 class="sub">Lectures</h3>
+        <ul class="dated">
+          <li><span class="when">2026</span><div><h3>Trustworthy Machine Learning</h3><p>University of Hamburg, Germany. Guest lectures and tutorials.</p></div></li>
+          <li><span class="when">2017–18</span><div><h3>L2/L3 Networking Protocols</h3><p>NIIT, Gurgaon, India. Corporate instructor for engineers from Nokia and Cisco.</p></div></li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <!-- Service -->
   <section id="service" aria-labelledby="service-h">
-    <h2 id="service-h">Academic service</h2>
-    <div class="two">
-      <div>
-        <h3 class="sub">Organization and chairing</h3>
-        <ul class="dated">
-          <li><span class="when">2027</span><div><h3>Co-organizer, <a href="https://mirror-workshop.io">MIRROR</a></h3><p>1st Workshop on Meta-Science in AI Security Research, IEEE SaTML, Reykjavík, Iceland</p></div></li>
-          <li><span class="when">2025</span><div><h3>Discussion chair, Privacy and Alignment</h3><p><a href="https://llmsec-eurips.github.io">Foundations of Language Model Security</a>, EurIPS, Copenhagen, Denmark</p></div></li>
-          <li><span class="when">2025</span><div><h3>Participant, SAND challenge</h3><p><a href="https://www.sand.icar.cnr.it">Speech Analysis for Neurodegenerative Diseases</a>, IEEE ICASSP 2026 Grand Challenge</p></div></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="sub">Reviewing</h3>
-        <ul class="dated">
-          <li><span class="when">2026</span><div><p style="color: var(--ink)">NDSS Artifact Evaluation Committee; IEEE SaTML; ACM Web Conference; COLM; AISec; IEEE TIFS</p></div></li>
-          <li><span class="when">2025</span><div><p style="color: var(--ink)">Pattern Recognition; ECML-PKDD STAI Workshop; ICLR TTU Workshop; S+SSPR</p></div></li>
-        </ul>
-      </div>
-    </div>
+    <h2 id="service-h">Academic Services</h2>
+    <h3 class="sub">Organization and chairing</h3>
+    <ul class="dated">
+      <li><span class="when">2027</span><div><h3>Co-Chair, <a href="https://mirror-workshop.io">MIRROR</a></h3><p>1st Workshop on Meta-Science in AI Security Research, co-located with IEEE SaTML, Reykjavík, Iceland</p></div></li>
+      <li><span class="when">2025</span><div><h3>Discussion Chair, Privacy and Alignment</h3><p><a href="https://llmsec-eurips.github.io">Foundations of Language Model Security</a>, EurIPS, Copenhagen, Denmark</p></div></li>
+    </ul>
+
+    <h3 class="sub">Program committees and reviewing</h3>
+    <ul class="dated compact">
+      <li><span class="when">2026</span><div><h3>Network and Distributed System Security Symposium (NDSS)</h3><p>Artifact Evaluation Committee</p></div></li>
+      <li><span class="when">2026</span><div><h3>IEEE Secure and Trustworthy Machine Learning (SaTML)</h3></div></li>
+      <li><span class="when">2026</span><div><h3>ACM Web Conference (WWW)</h3></div></li>
+      <li><span class="when">2026</span><div><h3>Conference on Language Modeling (COLM)</h3></div></li>
+      <li><span class="when">2026</span><div><h3>ACM Workshop on Artificial Intelligence and Security (AISec)</h3></div></li>
+      <li><span class="when">2026</span><div><h3>IEEE Transactions on Information Forensics and Security (TIFS)</h3><p>Journal reviewer</p></div></li>
+      <li><span class="when">2025–26</span><div><h3>Pattern Recognition</h3><p>Journal reviewer</p></div></li>
+      <li><span class="when">2025</span><div><h3>ECML-PKDD Workshop on Secure and Trustworthy AI (STAI)</h3></div></li>
+      <li><span class="when">2025</span><div><h3>ICLR Workshop on Test-Time Updates (TTU)</h3></div></li>
+      <li><span class="when">2025</span><div><h3>Structural, Syntactic, and Statistical Pattern Recognition (S+SSPR)</h3></div></li>
+    </ul>
+
+    <h3 class="sub">Challenges</h3>
+    <ul class="dated">
+      <li><span class="when">2025</span><div><h3>Participant, SAND challenge</h3><p><a href="https://www.sand.icar.cnr.it">Speech Analysis for Neurodegenerative Diseases</a>, IEEE ICASSP 2026 Grand Challenge</p></div></li>
+    </ul>
   </section>
 
   <!-- CV -->
@@ -370,6 +380,26 @@
 <footer>© 2026 Srishti Gupta</footer>
 
 <script>
+(() => {
+  const btn = document.getElementById('theme-toggle');
+  const sys = window.matchMedia('(prefers-color-scheme: dark)');
+  const current = () => document.documentElement.dataset.theme || (sys.matches ? 'dark' : 'light');
+  const label = () => {
+    const t = current();
+    btn.textContent = t === 'dark' ? 'Mode: Dark' : 'Mode: Light';
+    btn.setAttribute('aria-label', t === 'dark' ? 'Dark mode on. Switch to light mode' : 'Light mode on. Switch to dark mode');
+  };
+  btn.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    label();
+    window.dispatchEvent(new Event('themechange'));
+  });
+  sys.addEventListener('change', label);
+  label();
+})();
+
 (() => {
   const canvas = document.getElementById('drift');
   const ctx = canvas.getContext('2d');
@@ -504,7 +534,9 @@
   }
 
   buttons.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode, true)));
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => draw(mode, 1));
+  const redraw = () => draw(mode, mode === 'lab' ? 1 : Math.min(1, (performance.now() - start) / DUR));
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redraw);
+  window.addEventListener('themechange', redraw);
   setupCanvas();
   setMode('lab', false);
   if (reduce) draw('lab', 1);

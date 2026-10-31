@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Srishti Gupta</title>
+<meta name="description" content="Srishti Gupta, postdoctoral researcher at CISPA. Robustness and security of machine learning after deployment: distribution shift, adversarial drift and trustworthy evaluation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F6F8F7;
+    --surface: #FFFFFF;
+    --ink: #1C2B33;
+    --muted: #56656D;
+    --rule: #D9E0E2;
+    --accent: #0E6E8C;      /* in-distribution / links */
+    --accent-soft: #DCEBF0;
+    --class-b: #44525A;     /* second class in the visual */
+    --drift: #B7790F;       /* natural drift */
+    --attack: #B4233B;      /* adversarial drift */
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12191D; --surface: #18232A; --ink: #E4EBEE; --muted: #9AAAB2;
+      --rule: #2A3840; --accent: #5BB5D3; --accent-soft: #1D3742; --class-b: #A9B6BD;
+      --drift: #E2A93B; --attack: #F0647A; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #12191D; --surface: #18232A; --ink: #E4EBEE; --muted: #9AAAB2;
+    --rule: #2A3840; --accent: #5BB5D3; --accent-soft: #1D3742; --class-b: #A9B6BD;
+    --drift: #E2A93B; --attack: #F0647A; color-scheme: dark;
+  }
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 64px); scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  *, *::before, *::after { box-sizing: inherit; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 400 1rem/1.6 "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  h1, h2, h3 { font-family: "Literata", Georgia, serif; font-weight: 600; line-height: 1.2; }
+
+  /* Navigation */
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+  nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule);
+  }
+  nav .inner { max-width: 1040px; margin: 0 auto; padding: 0.7rem 1.25rem; display: flex; gap: 1.25rem; align-items: center; overflow-x: auto; }
+  nav .home { font-family: "Literata", Georgia, serif; font-weight: 600; color: var(--ink); text-decoration: none; margin-right: auto; white-space: nowrap; }
+  nav a:not(.home) { color: var(--muted); text-decoration: none; font-size: 0.92rem; white-space: nowrap; }
+  nav a:not(.home):hover { color: var(--ink); }
+
+  main { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  section { padding-top: 3rem; }
+  section > h2 { font-size: 1.5rem; margin: 0 0 1.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--rule); }
+  .prose { max-width: 68ch; }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: start; padding-top: 2.75rem; }
+  .who { display: flex; gap: 1.25rem; align-items: center; margin-bottom: 1.25rem; }
+  .avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; flex: none; background: var(--accent-soft); }
+  .avatar-fallback { display: grid; place-items: center; font-family: "Literata", Georgia, serif; font-size: 2rem; color: var(--accent); }
+  .hero h1 { font-size: clamp(2.1rem, 4.5vw, 2.9rem); margin: 0; letter-spacing: -0.01em; }
+  .role { color: var(--muted); margin: 0.2rem 0 0; }
+  .lede { font-size: 1.1rem; margin: 0 0 1rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; margin: 1.25rem 0 0; padding: 0; list-style: none; font-size: 0.95rem; }
+
+  /* Drift visual */
+  figure.drift { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 1rem; }
+  .drift canvas { width: 100%; height: auto; display: block; }
+  .modes { display: flex; gap: 0.4rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+  .modes button {
+    font: 500 0.88rem/1 "Public Sans", sans-serif; color: var(--muted); background: transparent;
+    border: 1px solid var(--rule); border-radius: 999px; padding: 0.45rem 0.8rem; cursor: pointer;
+  }
+  .modes button[aria-pressed="true"] { color: var(--surface); background: var(--ink); border-color: var(--ink); }
+  .drift figcaption { font-size: 0.92rem; color: var(--muted); margin-top: 0.6rem; min-height: 3em; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.82rem; color: var(--muted); margin-top: 0.4rem; }
+  .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 0.35rem; vertical-align: 0; background: var(--c); }
+
+  /* Research themes */
+  .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+  .theme { border-top: 3px solid var(--c); padding-top: 0.75rem; }
+  .theme h3 { font-size: 1.08rem; margin: 0 0 0.4rem; }
+  .theme p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+  /* News */
+  .news { list-style: none; padding: 0; margin: 0; max-width: 72ch; }
+  .news li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: 0.45rem 0; }
+  .news time, .dated .when { color: var(--muted); font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+
+  /* Publications */
+  .year { font-family: "Literata", Georgia, serif; color: var(--muted); font-size: 1.05rem; margin: 1.75rem 0 0.5rem; }
+  .pub { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--rule); }
+  .pub:last-child { border-bottom: 0; }
+  .tag { align-self: start; justify-self: start; font-size: 0.75rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 0.2rem 0.45rem; margin-top: 0.2rem; white-space: nowrap; }
+  .pub .title { font-weight: 600; margin: 0; }
+  .pub .venue { font-style: italic; color: var(--ink); margin: 0.1rem 0 0; font-size: 0.95rem; }
+  .pub .authors { color: var(--muted); margin: 0.15rem 0 0; font-size: 0.92rem; }
+  .pub .authors b { color: var(--ink); font-weight: 600; }
+  .pub .plinks { margin: 0.25rem 0 0; font-size: 0.9rem; display: flex; gap: 0.9rem; }
+
+  /* Dated lists (teaching, supervision, service, talks) */
+  .dated { list-style: none; padding: 0; margin: 0; }
+  .dated li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: 0.65rem 0; border-bottom: 1px solid var(--rule); }
+  .dated li:last-child { border-bottom: 0; }
+  .dated h3 { font-family: "Public Sans", sans-serif; font-size: 1rem; margin: 0; }
+  .dated p { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.95rem; }
+  .sub { font-family: "Literata", Georgia, serif; font-size: 1.15rem; margin: 2rem 0 0.5rem; }
+  .sub:first-of-type { margin-top: 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+
+  .refs { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem; }
+  .refs p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+  .cv-block { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: baseline; }
+  .button { display: inline-block; background: var(--ink); color: var(--paper); text-decoration: none; padding: 0.6rem 1.1rem; border-radius: 6px; font-weight: 500; }
+  .button:hover { opacity: 0.9; }
+  footer { max-width: 1040px; margin: 0 auto; padding: 2rem 1.25rem 3rem; color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--rule); }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; gap: 1.75rem; }
+    .themes, .two, .refs { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .pub, .dated li, .news li { grid-template-columns: 1fr; gap: 0.25rem; }
+    .avatar { width: 72px; height: 72px; }
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="Sections">
+  <div class="inner">
+    <a class="home" href="#top">Srishti Gupta</a>
+    <a href="#research">Research</a>
+    <a href="#publications">Publications</a>
+    <a href="#teaching">Teaching</a>
+    <a href="#service">Service</a>
+    <a href="#cv">CV</a>
+  </div>
+</nav>
+
+<main id="top">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <div class="who">
+        <!-- Add your photo as profile.jpg next to this file -->
+        <img class="avatar" src="profile.jpg" alt="Portrait of Srishti Gupta"
+             onerror="this.outerHTML='<div class=&quot;avatar avatar-fallback&quot; aria-hidden=&quot;true&quot;>SG</div>'">
+        <div>
+          <h1>Srishti Gupta</h1>
+          <p class="role">Postdoctoral Researcher, <a href="https://cispa.de">CISPA Helmholtz Center for Information Security</a>, Saarbrücken</p>
+        </div>
+      </div>
+      <p class="lede">Machine learning models are tested in the lab but used in the world. I study what happens in between: how deployed models fail when their inputs drift, whether naturally or at an attacker’s hand, and how to detect, withstand and honestly measure that drift.</p>
+      <p class="prose">I work in <a href="https://leaschoenherr.me">Lea Schönherr’s group</a> at CISPA. I completed my Ph.D. in Artificial Intelligence (summa cum laude) in the Italian National PhD Program, at Sapienza University of Rome and the University of Cagliari, advised by <a href="https://battistabiggio.github.io">Battista Biggio</a> and <a href="https://www.saiferlab.ai/people/fabioroli">Fabio Roli</a>. Before research, I built data pipelines at JPMorgan Chase in New York.</p>
+      <ul class="links">
+        <li><a href="mailto:srishti.gupta@cispa.de">srishti.gupta@cispa.de</a></li>
+        <li><a href="https://scholar.google.com/citations?user=q1eurDYAAAAJ&amp;hl=en">Google Scholar</a></li>
+        <li><a href="https://github.com/srish01">GitHub</a></li>
+        <li><a href="https://orcid.org/0000-0002-0810-6737">ORCID</a></li>
+        <li><a href="cv.pdf">CV (PDF)</a></li>
+      </ul>
+    </div>
+
+    <figure class="drift" aria-labelledby="drift-caption">
+      <div class="modes" role="group" aria-label="Choose a scenario">
+        <button type="button" data-mode="lab" aria-pressed="true">In the lab</button>
+        <button type="button" data-mode="natural" aria-pressed="false">Natural drift</button>
+        <button type="button" data-mode="adversarial" aria-pressed="false">Adversarial drift</button>
+      </div>
+      <canvas id="drift" width="440" height="300" role="img" aria-label="Animated scatter plot of a classifier under drift"></canvas>
+      <div class="legend" aria-hidden="true">
+        <span style="--c: var(--accent)">Class A</span>
+        <span style="--c: var(--class-b)">Class B</span>
+        <span style="--c: var(--drift)">Outside what the model has seen</span>
+        <span style="--c: var(--attack)">Pushed across by an attacker</span>
+      </div>
+      <figcaption id="drift-caption"></figcaption>
+    </figure>
+  </div>
+
+  <!-- News -->
+  <section id="news" aria-labelledby="news-h">
+    <h2 id="news-h">News</h2>
+    <ul class="news">
+      <li><time>2026</time><span>Co-organizing <a href="https://mirror-workshop.io">MIRROR</a>, the first workshop on meta-science in AI security research, at IEEE SaTML 2027 in Reykjavík.</span></li>
+      <li><time>May 2026</time><span>Defended my Ph.D. thesis summa cum laude and joined CISPA as a postdoctoral researcher.</span></li>
+      <li><time>2026</time><span>“Chasing Shadows: Pitfalls in LLM Security Research” appears at NDSS 2026.</span></li>
+      <li><time>Dec 2025</time><span>Discussion chair at the <a href="https://llmsec-eurips.github.io">Foundations of Language Model Security</a> workshop, EurIPS 2025, Copenhagen.</span></li>
+    </ul>
+  </section>
+
+  <!-- Research -->
+  <section id="research" aria-labelledby="research-h">
+    <h2 id="research-h">Research</h2>
+    <p class="prose">I work at the intersection of machine learning robustness and security, on how AI systems behave once deployed in open, evolving and adversarial environments. My work spans images, text, audio, code and malware.</p>
+    <div class="themes">
+      <div class="theme" style="--c: var(--drift)">
+        <h3>Adapting to distribution shift</h3>
+        <p>Detecting out-of-distribution inputs and learning continually without forgetting or full retraining, for vision, Android malware and deepfake detection.</p>
+      </div>
+      <div class="theme" style="--c: var(--attack)">
+        <h3>Exposing failures of deployed AI</h3>
+        <p>Adversarial and side-channel attacks, privacy leakage in memory-augmented LLM assistants and multi-agent systems, and trustworthiness gaps in audio language models.</p>
+      </div>
+      <div class="theme" style="--c: var(--accent)">
+        <h3>Trustworthy evaluation</h3>
+        <p>Uncovering methodological pitfalls in AI security research, auditing LLM-as-a-judge evaluations, and building generalization and robustness benchmarks.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" aria-labelledby="pubs-h">
+    <h2 id="pubs-h">Publications</h2>
+    <p class="prose" style="color: var(--muted); margin-top: 0">Full list on <a href="https://scholar.google.com/citations?user=q1eurDYAAAAJ&amp;hl=en">Google Scholar</a>.</p>
+
+    <h3 class="year">2026</h3>
+    <article class="pub"><span class="tag">NDSS</span><div>
+      <p class="title">Chasing Shadows: Pitfalls in LLM Security Research</p>
+      <p class="venue">Network and Distributed System Security Symposium (NDSS)</p>
+      <p class="authors">Jonathan Evertz, Niklas Risse, Nicolai Neuer, Andreas Müller, Philipp Normann, Gaetano Sapia, <b>Srishti Gupta</b>, David Pape, Soumya Shaw, Devansh Srivastav, Christian Wressnegger, Erwin Quiring, Thorsten Eisenhofer, Daniel Arp, Lea Schönherr</p>
+      <p class="plinks"><a href="https://doi.org/10.60882/cispa.31861624">Paper</a></p>
+    </div></article>
+    <article class="pub"><span class="tag">IJCV</span><div>
+      <p class="title">Out-of-Distribution Detection for Continual Learning: Design Principles and Benchmarking</p>
+      <p class="venue">International Journal of Computer Vision (IJCV)</p>
+      <p class="authors"><b>Srishti Gupta</b>, Riccardo Balia, Daniele Angioni, Fabio Brau, Maura Pintor, Ambra Demontis, Alessandro Sebastian, Salvatore Mario Carta, Fabio Roli, Battista Biggio</p>
+    </div></article>
+    <article class="pub"><span class="tag">TIFS</span><div>
+      <p class="title">Regression-aware Continual Learning for Android Malware Detection</p>
+      <p class="venue">IEEE Transactions on Information Forensics and Security (TIFS)</p>
+      <p class="authors">Daniele Ghiani, Daniele Angioni, Giorgio Piras, Angelo Sotgiu, Luca Minnei, <b>Srishti Gupta</b>, Maura Pintor, Fabio Roli, Battista Biggio</p>
+      <p class="plinks"><a href="https://doi.org/10.1109/TIFS.2026.3714132">Paper</a></p>
+    </div></article>
+    <article class="pub"><span class="tag">T-ITS</span><div>
+      <p class="title">Security of Deep Reinforcement Learning for Autonomous Driving: A Survey</p>
+      <p class="venue">IEEE Transactions on Intelligent Transportation Systems (T-ITS)</p>
+      <p class="authors">Ambra Demontis, <b>Srishti Gupta</b>, Maura Pintor, Luca Demetrio, Kathrin Grosse, Hsiao-Ying Lin, Chengfang Fang, Battista Biggio, Fabio Roli</p>
+      <p class="plinks"><a href="https://doi.org/10.1109/TITS.2026.3740283">Paper</a></p>
+    </div></article>
+    <article class="pub"><span class="tag">DAI</span><div>
+      <p class="title">Over-parameterization and Adversarial Robustness in Neural Networks: An Overview and Empirical Analysis</p>
+      <p class="venue">Discover Artificial Intelligence, Springer Nature</p>
+      <p class="authors"><b>Srishti Gupta</b>, Zhang Chen, Luca Demetrio, Fabio Brau, Xiaoyi Feng, Zhaoqiang Xia, Antonio Emanuele Cinà, Maura Pintor, Luca Oneto, Ambra Demontis, Battista Biggio, Fabio Roli</p>
+      <p class="plinks"><a href="https://doi.org/10.1007/s44163-026-01621-5">Paper</a></p>
+    </div></article>
+
+    <h3 class="year">2025</h3>
+    <article class="pub"><span class="tag">PR</span><div>
+      <p class="title">Buffer-free Class-Incremental Learning with Out-of-Distribution Detection</p>
+      <p class="venue">Pattern Recognition</p>
+      <p class="authors"><b>Srishti Gupta</b>, Daniele Angioni, Maura Pintor, Ambra Demontis, Lea Schönherr, Battista Biggio, Fabio Roli</p>
+      <p class="plinks"><a href="https://doi.org/10.1016/j.patcog.2025.112441">Paper</a></p>
+    </div></article>
+    <article class="pub"><span class="tag">ICML-W</span><div>
+      <p class="title">BUILD: Buffer-free Incremental Learning with OOD Detection for the Wild</p>
+      <p class="venue">ICML Workshop on Foundation Models in the Wild</p>
+      <p class="authors"><b>Srishti Gupta</b>, Daniele Angioni, Ambra Demontis, Lea Schönherr, Battista Biggio, Fabio Roli</p>
+      <p class="plinks"><a href="https://github.com/srish01">Code</a></p>
+    </div></article>
+
+    <h3 class="year">2021</h3>
+    <article class="pub"><span class="tag">Access</span><div>
+      <p class="title">Gradient-Based Attacks on Information-Theoretic Feature Selection</p>
+      <p class="venue">IEEE Access, vol. 9</p>
+      <p class="authors"><b>Srishti Gupta</b>, et al.</p>
+      <p class="plinks"><a href="https://doi.org/10.1109/ACCESS.2021.3105555">Paper</a></p>
+    </div></article>
+
+    <h3 class="year">Theses</h3>
+    <article class="pub"><span class="tag">Ph.D.</span><div>
+      <p class="title">Robustness of Machine Learning Systems: under Distribution Shift &amp; in Adversarial Environments</p>
+      <p class="venue">Sapienza University of Rome, 2026</p>
+      <p class="plinks"><a href="https://iris.uniroma1.it/handle/11573/1768180">Thesis</a></p>
+    </div></article>
+    <article class="pub"><span class="tag">M.Sc.</span><div>
+      <p class="title">Impacts of Adversary Attacking Filter-Based Feature Selection Algorithms</p>
+      <p class="venue">University of Arizona, 2021</p>
+      <p class="plinks"><a href="https://www.proquest.com/openview/ca2ee2b9a86d9dfe87a607f9869ba869/1?pq-origsite=gscholar&amp;cbl=18750&amp;diss=y">Thesis</a></p>
+    </div></article>
+  </section>
+
+  <!-- Talks -->
+  <section id="talks" aria-labelledby="talks-h">
+    <h2 id="talks-h">Talks</h2>
+    <ul class="dated">
+      <li><span class="when">2025</span><div><h3>Cue-Rich Evaluation of Speech and Trustworthiness</h3><p>EurIPS 2025 Workshop on Foundations of Language Model Security, Copenhagen, Denmark</p></div></li>
+      <li><span class="when">2024</span><div><h3>BUILD: Buffer-free Incremental Learning with OOD Detection for the Wild</h3><p>ICML Workshop on Foundation Models in the Wild, Vienna, Austria</p></div></li>
+    </ul>
+  </section>
+
+  <!-- Teaching & supervision -->
+  <section id="teaching" aria-labelledby="teaching-h">
+    <h2 id="teaching-h">Teaching and supervision</h2>
+    <div class="two">
+      <div>
+        <h3 class="sub">Lectures</h3>
+        <ul class="dated">
+          <li><span class="when">2026</span><div><h3>Trustworthy Machine Learning</h3><p>University of Hamburg, Germany. Guest lectures and tutorials.</p></div></li>
+          <li><span class="when">2017–18</span><div><h3>L2/L3 Networking Protocols</h3><p>NIIT, Gurgaon, India. Corporate instructor for engineers from Nokia and Cisco.</p></div></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub">Students</h3>
+        <ul class="dated">
+          <li><span class="when">2026–27</span><div><h3>Projection attacks on audio language models</h3><p>Esha Afzal, M.Sc. research, co-supervised</p></div></li>
+          <li><span class="when">2026–27</span><div><h3>Robustness of AI-generated harnesses for bug-detecting fuzzers</h3><p>Mubeen Afzal, M.Sc. thesis</p></div></li>
+          <li><span class="when">2026–27</span><div><h3>Chain-of-thought monitoring via random paraphrasers in RLHF</h3><p>Teodor Vasilev, B.Sc. project</p></div></li>
+          <li><span class="when">2026</span><div><h3>Security and utility of single- vs. multi-agent LLM systems</h3><p>Alex Dugast, M.Sc. thesis</p></div></li>
+          <li><span class="when">2026</span><div><h3>Auditing continual malware detection</h3><p>Mete Cem Turan, B.Sc. internship</p></div></li>
+          <li><span class="when">2026</span><div><h3>Continual deepfake detection</h3><p>Onur Aray, B.Sc. project</p></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service -->
+  <section id="service" aria-labelledby="service-h">
+    <h2 id="service-h">Academic service</h2>
+    <div class="two">
+      <div>
+        <h3 class="sub">Organization and chairing</h3>
+        <ul class="dated">
+          <li><span class="when">2027</span><div><h3>Co-organizer, <a href="https://mirror-workshop.io">MIRROR</a></h3><p>1st Workshop on Meta-Science in AI Security Research, IEEE SaTML, Reykjavík, Iceland</p></div></li>
+          <li><span class="when">2025</span><div><h3>Discussion chair, Privacy and Alignment</h3><p><a href="https://llmsec-eurips.github.io">Foundations of Language Model Security</a>, EurIPS, Copenhagen, Denmark</p></div></li>
+          <li><span class="when">2025</span><div><h3>Participant, SAND challenge</h3><p><a href="https://www.sand.icar.cnr.it">Speech Analysis for Neurodegenerative Diseases</a>, IEEE ICASSP 2026 Grand Challenge</p></div></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub">Reviewing</h3>
+        <ul class="dated">
+          <li><span class="when">2026</span><div><p style="color: var(--ink)">NDSS Artifact Evaluation Committee; IEEE SaTML; ACM Web Conference; COLM; AISec; IEEE TIFS</p></div></li>
+          <li><span class="when">2025</span><div><p style="color: var(--ink)">Pattern Recognition; ECML-PKDD STAI Workshop; ICLR TTU Workshop; S+SSPR</p></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CV -->
+  <section id="cv" aria-labelledby="cv-h">
+    <h2 id="cv-h">CV</h2>
+    <div class="cv-block">
+      <a class="button" href="cv.pdf">Download CV (PDF)</a>
+      <p class="prose" style="margin: 0; color: var(--muted)">Education, appointments, grants, publications and references.</p>
+    </div>
+    <h3 class="sub" style="margin-top: 2rem">References</h3>
+    <ul class="refs">
+      <li><a href="https://battistabiggio.github.io"><b>Prof. Battista Biggio</b></a><p>University of Cagliari, Italy</p></li>
+      <li><a href="https://www.saiferlab.ai/people/fabioroli"><b>Prof. Fabio Roli</b></a><p>University of Genoa, Italy</p></li>
+      <li><a href="https://leaschoenherr.me"><b>Dr. Lea Schönherr</b></a><p>CISPA Helmholtz Center for Information Security, Germany</p></li>
+      <li><a href="https://gditzler.github.io"><b>Dr. Gregory Ditzler</b></a><p>Lockheed Martin AI Center; formerly University of Arizona</p></li>
+    </ul>
+  </section>
+</main>
+
+<footer>© 2026 Srishti Gupta</footer>
+
+<script>
+(() => {
+  const canvas = document.getElementById('drift');
+  const ctx = canvas.getContext('2d');
+  const caption = document.getElementById('drift-caption');
+  const buttons = [...document.querySelectorAll('.modes button')];
+  const W = 440, H = 300;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const captions = {
+    lab: 'In the lab, test data looks like training data. Every point sits inside the region the model has seen, and the boundary separates the two classes cleanly.',
+    natural: 'Natural drift: the world changes. New devices, new malware families or new generators slowly move the data outside what the model has seen. Nothing is attacked, yet predictions become unreliable.',
+    adversarial: 'Adversarial drift: an attacker nudges a few inputs with small, deliberate steps until they cross the boundary. Each change is small, but the model’s decision flips.'
+  };
+
+  // Seeded random so the picture is the same on every visit
+  let seed = 7;
+  const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const gauss = () => { let u = 0, v = 0; while (!u) u = rand(); while (!v) v = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+
+  // Decision boundary: a gentle curve; side() > 0 means class B side
+  const boundaryY = x => 150 - 1.09 * (x - 205) + 0.0015 * (x - 205) ** 2;
+  const side = (x, y) => boundaryY(x) - y;      // >0: above the curve on screen = class A
+  const region = { cx: 205, cy: 150, rx: 150, ry: 100 };
+  const inRegion = (x, y) => ((x - region.cx) / region.rx) ** 2 + ((y - region.cy) / region.ry) ** 2 <= 1;
+
+  const pts = [];
+  for (let i = 0; i < 26; i++) pts.push({ x: 165 + gauss() * 24, y: 112 + gauss() * 18, c: 'A' });
+  for (let i = 0; i < 26; i++) pts.push({ x: 258 + gauss() * 24, y: 198 + gauss() * 18, c: 'B' });
+  // keep training points tidy: correct side and inside region
+  pts.forEach(p => {
+    for (let k = 0; k < 40 && ((p.c === 'A') !== (side(p.x, p.y) > 6) || !inRegion(p.x, p.y)); k++) {
+      p.x = p.c === 'A' ? 165 + gauss() * 22 : 258 + gauss() * 22;
+      p.y = p.c === 'A' ? 112 + gauss() * 16 : 198 + gauss() * 16;
+    }
+  });
+  // attacker targets: the three class-A points closest to the boundary
+  const targets = pts.filter(p => p.c === 'A').sort((a, b) => side(a.x, a.y) - side(b.x, b.y)).slice(0, 3);
+  const drift = { dx: 130, dy: -60 };
+
+  function colors() {
+    const s = getComputedStyle(document.documentElement);
+    const g = n => s.getPropertyValue(n).trim();
+    return { ink: g('--ink'), muted: g('--muted'), rule: g('--rule'), a: g('--accent'), soft: g('--accent-soft'),
+             b: g('--class-b'), drift: g('--drift'), attack: g('--attack'), surface: g('--surface') };
+  }
+
+  function setupCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // Unit normal pointing from class A side toward class B side, at x
+  function normalAt(x) {
+    const slope = -1.09 + 0.003 * (x - 205);
+    const len = Math.hypot(1, slope);
+    return { nx: -slope / len, ny: 1 / len }; // direction of decreasing side()
+  }
+  const ease = t => t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+
+  function draw(mode, t) {
+    const c = colors();
+    ctx.clearRect(0, 0, W, H);
+
+    // shaded halves
+    ctx.beginPath(); ctx.moveTo(0, 0);
+    for (let x = 0; x <= W; x += 8) ctx.lineTo(x, boundaryY(x));
+    ctx.lineTo(W, 0); ctx.closePath();
+    ctx.fillStyle = c.soft; ctx.globalAlpha = 0.55; ctx.fill(); ctx.globalAlpha = 1;
+
+    // training region
+    ctx.save(); ctx.setLineDash([5, 5]); ctx.strokeStyle = c.muted; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.ellipse(region.cx, region.cy, region.rx, region.ry, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+    ctx.fillStyle = c.muted; ctx.font = '12px "Public Sans", sans-serif';
+    ctx.fillText('what the model has seen', region.cx - 70, region.cy - region.ry - 7);
+
+    // boundary
+    ctx.beginPath();
+    for (let x = 0; x <= W; x += 4) x ? ctx.lineTo(x, boundaryY(x)) : ctx.moveTo(x, boundaryY(x));
+    ctx.strokeStyle = c.ink; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.fillStyle = c.ink; ctx.fillText('decision boundary', 340, boundaryY(330) + 4);
+
+    const k = ease(Math.min(1, t));
+    for (const p of pts) {
+      let x = p.x, y = p.y, col = p.c === 'A' ? c.a : c.b, trail = null;
+      if (mode === 'natural') {
+        x += drift.dx * k; y += drift.dy * k;
+        if (!inRegion(x, y)) col = c.drift;
+      }
+      if (mode === 'adversarial' && targets.includes(p)) {
+        const n = normalAt(p.x);
+        const need = side(p.x, p.y) + 5;      // distance to cross with margin
+        const steps = 5, prog = k * steps;
+        const done = Math.floor(prog), frac = prog - done;
+        const stepLen = need / steps;
+        const dist = (done + ease(Math.min(1, frac))) * stepLen;
+        x = p.x + n.nx * dist; y = p.y + n.ny * dist;
+        trail = { x0: p.x, y0: p.y };
+        if (side(x, y) < 0) col = c.attack;
+      }
+      if (trail) {
+        ctx.save(); ctx.setLineDash([2, 3]); ctx.strokeStyle = c.attack; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.moveTo(trail.x0, trail.y0); ctx.lineTo(x, y); ctx.stroke(); ctx.restore();
+        ctx.beginPath(); ctx.arc(trail.x0, trail.y0, 3, 0, Math.PI * 2); ctx.strokeStyle = c.muted; ctx.lineWidth = 1; ctx.stroke();
+      }
+      ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = col; ctx.fill();
+      ctx.lineWidth = 1.2; ctx.strokeStyle = c.surface; ctx.stroke();
+    }
+  }
+
+  const order = ['lab', 'natural', 'adversarial'];
+  let mode = 'lab', start = performance.now(), auto = !reduce, raf = null;
+  const DUR = 3200, HOLD = 2600;
+
+  function setMode(m, user) {
+    mode = m; start = performance.now();
+    if (user) auto = false;
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
+    caption.textContent = captions[m];
+    if (reduce) draw(m, 1); else if (!raf) loop();
+  }
+
+  function loop() {
+    raf = requestAnimationFrame(now => {
+      raf = null;
+      const el = now - start;
+      draw(mode, mode === 'lab' ? 1 : el / DUR);
+      if (auto && el > DUR + HOLD) setMode(order[(order.indexOf(mode) + 1) % 3], false);
+      if (auto || el < DUR) loop();
+    });
+  }
+
+  buttons.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode, true)));
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => draw(mode, 1));
+  setupCanvas();
+  setMode('lab', false);
+  if (reduce) draw('lab', 1);
+})();
+</script>
+</body>
+</html>

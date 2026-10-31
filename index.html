@@ -78,6 +78,10 @@
   .hero h1 { font-size: clamp(2.1rem, 4.5vw, 2.9rem); margin: 0; letter-spacing: -0.01em; }
   .role { color: var(--muted); margin: 0.2rem 0 0; }
   .lede { font-size: 1.1rem; margin: 0 0 1rem; }
+  .links.icons { gap: 0.6rem; align-items: center; }
+  .icon-link { display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; color: var(--muted); border: 1px solid var(--rule); transition: color .15s, border-color .15s; }
+  .icon-link:hover { color: var(--accent); border-color: var(--accent); }
+  .icon-link svg { width: 1.15rem; height: 1.15rem; }
   .links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; margin: 1.25rem 0 0; padding: 0; list-style: none; font-size: 0.95rem; }
 
   /* Drift visual */
@@ -176,11 +180,14 @@
       </div>
       <p class="lede">Machine learning models are tested in the lab but used in the world. I study what happens in between: how deployed models fail when their inputs drift, whether naturally or at an attacker’s hand, and how to detect, withstand and honestly measure that drift.</p>
       <p class="prose">I work in <a href="https://leaschoenherr.me">Lea Schönherr’s</a> group at CISPA. I completed my Ph.D. in Artificial Intelligence (summa cum laude) in the Italian National PhD Program, at Sapienza University of Rome co-hosted by the University of Cagliari, advised by <a href="https://battistabiggio.github.io">Battista Biggio</a> and <a href="https://www.saiferlab.ai/people/fabioroli">Fabio Roli</a>. Before research, I built data pipelines at JPMorgan Chase in New York.</p>
-      <ul class="links">
-        <li><a href="https://scholar.google.com/citations?user=q1eurDYAAAAJ&amp;hl=en">Google Scholar</a></li>
-        <li><a href="https://github.com/srish01">GitHub</a></li>
-        <li><a href="https://orcid.org/0000-0002-0810-6737">ORCID</a></li>
-        <li><a href="cv.pdf">CV (PDF)</a></li>
+      <!-- Icons: Font Awesome Free 6.7.2 (CC BY 4.0, fontawesome.com/license/free); dblp icon: Simple Icons (CC0) -->
+      <ul class="links icons">
+        <li><a class="icon-link" href="https://scholar.google.com/citations?user=q1eurDYAAAAJ&amp;hl=en" aria-label="Google Scholar" title="Google Scholar"><svg viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M390.9 298.5c0 0 0 .1 .1 .1c9.2 19.4 14.4 41.1 14.4 64C405.3 445.1 338.5 512 256 512s-149.3-66.9-149.3-149.3c0-22.9 5.2-44.6 14.4-64h0c1.7-3.6 3.6-7.2 5.6-10.7c4.4-7.6 9.4-14.7 15-21.3c27.4-32.6 68.5-53.3 114.4-53.3c33.6 0 64.6 11.1 89.6 29.9c9.1 6.9 17.4 14.7 24.8 23.5c5.6 6.6 10.6 13.8 15 21.3c2 3.4 3.8 7 5.5 10.5zm26.4-18.8c-30.1-58.4-91-98.4-161.3-98.4s-131.2 40-161.3 98.4L0 202.7 256 0 512 202.7l-94.7 77.1z"/></svg></a></li>
+        <li><a class="icon-link" href="https://dblp.org/pid/139/0768-4.html" aria-label="dblp" title="dblp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3.075.002c-.096.013-.154.092-.094.31L4.97 7.73 3.1 8.6s-.56.26-.4.85l2.45 9.159s.16.59.72.33l6.169-2.869 1.3-.61s.52-.24.42-.79l-.01-.06-1.13-4.22-.658-2.45-.672-2.49v-.04s-.16-.59-.84-1L3.5.141s-.265-.16-.425-.139zM18.324 5.03a.724.724 0 0 0-.193.06l-5.602 2.6.862 3.2 1.09 4.08.01.06c.05.47-.411.79-.411.79l-1.88.87.5 1.89.04.1c.07.17.28.6.81.91l6.95 4.269s.68.41.52-.17l-1.981-7.4 1.861-.86s.56-.26.4-.85L18.85 5.42s-.116-.452-.526-.39z"/></svg></a></li>
+        <li><a class="icon-link" href="https://orcid.org/0000-0002-0810-6737" aria-label="ORCID" title="ORCID"><svg viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M294.75 188.19h-45.92V342h47.47c67.62 0 83.12-51.34 83.12-76.91 0-41.64-26.54-76.9-84.67-76.9zM256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-80.79 360.76h-29.84v-207.5h29.84zm-14.92-231.14a19.57 19.57 0 1 1 19.57-19.57 19.64 19.64 0 0 1-19.57 19.57zM300 369h-81V161.26h80.6c76.73 0 110.44 54.83 110.44 103.85C410 318.39 368.38 369 300 369z"/></svg></a></li>
+        <li><a class="icon-link" href="https://github.com/srish01" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 496 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></a></li>
+        <li><a class="icon-link" href="https://www.linkedin.com/in/srishtigupta01/" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 448 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a></li>
+        <li><a class="icon-link" href="cv.pdf" aria-label="CV (PDF)" title="CV (PDF)"><svg viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 64C0 28.7 28.7 0 64 0L224 0l0 128c0 17.7 14.3 32 32 32l128 0 0 144-208 0c-35.3 0-64 28.7-64 64l0 144-48 0c-35.3 0-64-28.7-64-64L0 64zm384 64l-128 0L256 0 384 128zM176 352l32 0c30.9 0 56 25.1 56 56s-25.1 56-56 56l-16 0 0 32c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48 0-80c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24l-16 0 0 48 16 0zm96-80l32 0c26.5 0 48 21.5 48 48l0 64c0 26.5-21.5 48-48 48l-32 0c-8.8 0-16-7.2-16-16l0-128c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16l0-64c0-8.8-7.2-16-16-16l-16 0 0 96 16 0zm80-112c0-8.8 7.2-16 16-16l48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 32 32 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-32 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-64 0-64z"/></svg></a></li>
       </ul>
     </div>
 
@@ -207,8 +214,8 @@
     <ul class="news">
       <li><time>2026</time><span>Co-chairing <a href="https://mirror-workshop.io">MIRROR</a>, the first workshop on meta-science in AI security research, at IEEE SaTML 2027 in Reykjavík.</span></li>
       <li><time>May 2026</time><span>Defended my Ph.D. thesis summa cum laude and joined CISPA as a postdoctoral researcher.</span></li>
+      <li><time>2026</time><span>“Out-of-Distribution Detection for Continual Learning: Design Principles and Benchmarking” accepted at the International Journal of Computer Vision (IJCV).</span></li>
       <li><time>2026</time><span>“Chasing Shadows: Pitfalls in LLM Security Research” appears at NDSS 2026.</span></li>
-      <li><time>Dec 2025</time><span>Discussion chair at the <a href="https://llmsec-eurips.github.io">Foundations of Language Model Security</a> workshop, EurIPS 2025, Copenhagen.</span></li>
     </ul>
   </section>
 
@@ -219,11 +226,11 @@
     <div class="themes">
       <div class="theme" style="--c: var(--drift)">
         <h3>Adapting to distribution shift</h3>
-        <p>Detecting out-of-distribution inputs and learning continually without forgetting or full retraining, for language, vision, Android malwares, and deepfake detection.</p>
+        <p>Detecting out-of-distribution inputs and learning continually without forgetting or full retraining, for vision, Android malware and deepfake detection.</p>
       </div>
       <div class="theme" style="--c: var(--attack)">
         <h3>Exposing failures of deployed AI</h3>
-        <p>Adversarial and side-channel attacks, privacy leakage in memory-augmented LLM assistants and multi-agent systems, and trustworthiness gaps in Audio Language Models.</p>
+        <p>Adversarial and side-channel attacks, privacy leakage in memory-augmented LLM assistants and multi-agent systems, and trustworthiness gaps in audio language models.</p>
       </div>
       <div class="theme" style="--c: var(--accent)">
         <h3>Trustworthy evaluation</h3>
@@ -309,26 +316,21 @@
   <!-- Teaching & supervision -->
   <section id="teaching" aria-labelledby="teaching-h">
     <h2 id="teaching-h">Teaching and supervision</h2>
-    <div class="two">
-      <div>
-        <h3 class="sub">Students</h3>
-        <ul class="dated">
-          <li><span class="when">2026–27</span><div><h3>Projection attacks on Audio Language Models</h3><p>Esha Afzal, M.Sc. research, co-supervised</p></div></li>
-          <li><span class="when">2026–27</span><div><h3>Robustness of AI-generated harnesses for bug-detecting fuzzers</h3><p>Mubeen Afzal, M.Sc. thesis</p></div></li>
-          <li><span class="when">2026–27</span><div><h3>Chain-of-thought monitoring via random paraphrasers in RLHF</h3><p>Teodor Vasilev, B.Sc. project</p></div></li>
-          <li><span class="when">2026</span><div><h3>Security and utility of single- vs. multi-agent LLM systems</h3><p>Alex Dugast, M.Sc. thesis</p></div></li>
-          <li><span class="when">2026</span><div><h3>Auditing Continual Android Malware Detection</h3><p>Mete Cem Turan, B.Sc. internship</p></div></li>
-          <li><span class="when">2026</span><div><h3>Continual Deepfake Detection</h3><p>Onur Aray, B.Sc. project</p></div></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="sub">Lectures</h3>
-        <ul class="dated">
-          <li><span class="when">2026</span><div><h3>Trustworthy Machine Learning</h3><p>University of Hamburg, Germany. Guest lectures and tutorials.</p></div></li>
-          <li><span class="when">2017–18</span><div><h3>L2/L3 Networking Protocols</h3><p>NIIT, Gurgaon, India. Corporate instructor for engineers from Nokia and Cisco.</p></div></li>
-        </ul>
-      </div>
-    </div>
+    <h3 class="sub">Lectures</h3>
+    <ul class="dated">
+      <li><span class="when">2026</span><div><h3>Trustworthy Machine Learning</h3><p>University of Hamburg, Germany. Guest lectures and tutorials.</p></div></li>
+      <li><span class="when">2017–18</span><div><h3>L2/L3 Networking Protocols</h3><p>NIIT, Gurgaon, India. Corporate instructor for engineers from Nokia and Cisco.</p></div></li>
+    </ul>
+
+    <h3 class="sub">Students</h3>
+    <ul class="dated">
+      <li><span class="when">2026–27</span><div><h3>Projection attacks on audio language models</h3><p>Esha Afzal, M.Sc. research, co-supervised</p></div></li>
+      <li><span class="when">2026–27</span><div><h3>Robustness of AI-generated harnesses for bug-detecting fuzzers</h3><p>Mubeen Afzal, M.Sc. thesis</p></div></li>
+      <li><span class="when">2026–27</span><div><h3>Chain-of-thought monitoring via random paraphrasers in RLHF</h3><p>Teodor Vasilev, B.Sc. project</p></div></li>
+      <li><span class="when">2026</span><div><h3>Security and utility of single- vs. multi-agent LLM systems</h3><p>Alex Dugast, M.Sc. thesis</p></div></li>
+      <li><span class="when">2026</span><div><h3>Auditing continual malware detection</h3><p>Mete Cem Turan, B.Sc. internship</p></div></li>
+      <li><span class="when">2026</span><div><h3>Continual deepfake detection</h3><p>Onur Aray, B.Sc. project</p></div></li>
+    </ul>
   </section>
 
   <!-- Service -->
@@ -337,6 +339,7 @@
     <h3 class="sub">Organization and chairing</h3>
     <ul class="dated">
       <li><span class="when">2027</span><div><h3>Co-Chair, <a href="https://mirror-workshop.io">MIRROR</a></h3><p>1st Workshop on Meta-Science in AI Security Research, co-located with IEEE SaTML, Reykjavík, Iceland</p></div></li>
+      <li><span class="when">2026</span><div><h3>Organization Team, IEEE SaTML 2026</h3><p>IEEE Conference on Secure and Trustworthy Machine Learning, Munich, Germany</p></div></li>
       <li><span class="when">2025</span><div><h3>Discussion Chair, Privacy and Alignment</h3><p><a href="https://llmsec-eurips.github.io">Foundations of Language Model Security</a>, EurIPS, Copenhagen, Denmark</p></div></li>
     </ul>
 
